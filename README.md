@@ -194,7 +194,7 @@ In `print()`, the things you want to print are positional. `sep` and `end` are k
 3. Positional arguments depend on order. Keyword arguments depend on their name.
 4. When teaching, show the default first, then change one thing at a time.
 5. Predicting the output before running the code is a good way to check your understanding.
-6. [ADD: any takeaway of your own]
+
 
 ---
 
