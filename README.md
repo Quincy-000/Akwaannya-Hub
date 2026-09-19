@@ -37,15 +37,14 @@ This tells Python 3 to read the file and run it from top to bottom.
 
 ### The code and its output
 
-![Code and terminal output in VS Code](images/screenshot-code-and-output.png)
+ <img width="1034" height="680" alt="Screenshot 2026-09-19 223239" src="https://github.com/user-attachments/assets/6a6531ef-b769-4846-a303-5ae180448fd6" />
 
-> [ADD: one line saying what this screenshot shows]
 
 ### The learning material
 
 ![Python course lesson on positional arguments](images/screenshot-lesson.png)
 
-> [ADD: one line on where this lesson came from and how it fitted into your study time]
+ 
 
 ---
 
@@ -199,10 +198,8 @@ In `print()`, the things you want to print are positional. `sep` and `end` are k
 
 ---
 
-## Next steps
-
  
 
----
+
 
 *Written by Quincy — Team Nova*
