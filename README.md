@@ -198,7 +198,96 @@ In `print()`, the things you want to print are positional. `sep` and `end` are k
 
 ---
 
- 
+ ## Going further: operators, precedence, and parentheses
+
+This week I moved from `print()` basics into how Python evaluates arithmetic expressions — precedence, associativity, and how parentheses control order.
+
+### The task
+
+Break down and evaluate:
+
+```python
+print((5 * ((25 % 13) + 100) / (2 * 13)) // 2)
+```
+
+### My solution / working
+
+Working from the innermost parentheses outward:
+
+1. `25 % 13` → `12`
+2. `2 * 13` → `26`
+3. `12 + 100` → `112`
+4. `5 * 112` → `560`
+5. `560 / 26` → `21.538461538461538` (`/` is true division — always returns a float)
+6. `21.538461538461538 // 2` → `10.0`
+
+**Output:**
+```text
+10.0
+```
+
+### The mental model
+
+- Always resolve the **deepest parentheses first**, then work outward.
+- Within a level, ordinary precedence rules still apply (`*`, `/`, `%` before `+`, `-`).
+- `/` always returns a float in Python 3, even when the numbers divide evenly. That float "carries through" the rest of the calculation — which is why the final `//` still gives `10.0` and not `10`.
+
+### Unary vs binary operators
+
+- **Unary operator:** acts on **one** operand. Example: `-5`.
+- **Binary operator:** acts on **two** operands. Example: `3 - 5`.
+
+The same symbol can be either, depending on context — it's not about the symbol, it's about how many operands it's acting on.
+
+### Operator precedence, highest to lowest
+
+1. `**` (exponentiation)
+2. Unary `+` and `-`
+3. `*`, `/`, `%`
+4. Binary `+` and `-`
+
+Note: a unary operator to the right of `**` binds *more* tightly than `**` itself — e.g. `4 ** -1` is `4 ** (-1)`, which is `0.25`.
+
+### `**` is right-associative
+
+Unlike most operators, `**` groups **right to left**.
+
+```python
+print(2 ** 3 ** 2)
+```
+
+This is `2 ** (3 ** 2)`, not `(2 ** 3) ** 2`.
+
+- `3 ** 2` → `9`
+- `2 ** 9` → `512`
+
+### Modulo with negative numbers
+
+```python
+print(2 % -4)
+```
+
+Python's `%` takes the **sign of the divisor**, not the dividend.
+
+- `2 // -4` → `-1` (floor division rounds toward negative infinity)
+- `-1 * -4` → `4`
+- `2 - 4` → `-2`
+
+**Output:** `-2`
+
+Compare with `2 % 4`, which is a straightforward `2`.
+
+### Why it matters
+
+Parentheses aren't just for changing order — they're often used purely for **readability**, even when they don't change the result. Understanding precedence means you can predict output correctly *without* over-parenthesising everything defensively, and know exactly when parentheses are load-bearing vs decorative.
+
+---
+
+## Challenges (this week)
+
+1. **`%` with negative numbers wasn't intuitive at first.** I expected it to follow the sign of the number being divided, not the divisor. Working it through via floor division (`//`) made it click.
+2. **Right-associativity of `**`** was a case where "left to right" — my default assumption for most operators — was wrong. Had to explicitly memorise `**` as the exception.
+3. **Keeping track of float vs int** through a long expression — one `/` early on turns everything float for the rest of the calculation, even later `//` operations.
 
 
 
