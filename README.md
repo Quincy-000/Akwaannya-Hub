@@ -6,6 +6,7 @@ This week's discussion session was an introduction to Python. I was the **builde
 
 This write-up covers what I taught, the code I used, and what I learnt from explaining it to others as well as from my own study time.
 
+
 ---
 
 ## What we covered
@@ -42,7 +43,7 @@ This tells Python 3 to read the file and run it from top to bottom.
 
 ### The learning material
 
-![Python course lesson on positional arguments](images/screenshot-lesson.png)
+<!-- ![Python course lesson on positional arguments](images/screenshot-lesson.png) -->
 
  
 
@@ -133,9 +134,6 @@ print("Programming", "Essentials", "in", sep="***", end="...")
 print("Python")
 ```
 
-![Lab code and output](images/screenshot-sep-end-lab.png)
-
-> [ADD: one line on what this screenshot shows]
 
 ### How I arrived at the answer
 
@@ -290,5 +288,144 @@ Parentheses aren't just for changing order — they're often used purely for **r
 3. **Keeping track of float vs int** through a long expression — one `/` early on turns everything float for the rest of the calculation, even later `//` operations.
 
 
+---
+
+## Going further: the Akwaanya Cruise Ticketing project
+
+> **Session:** Akwaanya Hub weekly discussion, Team Nova
+> **Session date:** Saturday, 3 October 2026
+> **Week:** 3
+> **Written:** 4 October 2026
+> **My role:** Builder. I built this project and demonstrated it live to my group and facilitator.
+
+This week's discussion at Akwaanya Hub was a project demonstration based on Module 3 of the Introduction to Python course on the Cisco platform (decisions, loops and lists). As the builder for Team Nova, I built a small program, ran it live in front of the group, and walked them through how each part of the code works. The write-up below records what I built, how I built it, and what I learnt along the way.
+
+The scenario is an invented one: a ticket booth for a sunset boat cruise, where the clerk types in a visitor's age and the program works out the ticket price.
+
+### The pricing rules
+
+| Age | Price |
+|---|---|
+| 0 to 5 | Free |
+| 6 to 17 | GHS 30 |
+| 18 to 59 | GHS 60 |
+| 60 and above | GHS 40 |
+
+### How I built it, in four stages
+
+Each stage was a complete, working program, and the next stage built on it.
+
+1. **Conditions (`if-elif-else`):** price one visitor from their age.
+2. **A loop (`while True` with `break`):** serve visitor after visitor until the clerk types `q`.
+3. **Validation (`or` with `continue`):** reject impossible ages (below 0 or above 120) so they are never priced or counted.
+4. **A list (`append()`, `len()`, `sum()`):** store each price in a list and work out the results from it.
+
+### The final code
+
+```python
+# Akwaanya Cruise Ticketing
+# Stage 4: serve visitors, reject impossible ages, and work out the results from a list
+
+# A list remembers many values in one variable, in the order they were added.
+# [] is an empty list: nothing in it yet.
+# This list is now our only record: one price per valid visitor.
+prices = []
+
+# "while True" repeats forever, so we need break to get out of it.
+while True:
+    # We keep the entry as text first, so we can check for "q"
+    # BEFORE converting to a number. int("q") would crash.
+    entry = input("Enter the visitor's age (or q to finish): ")
+
+    # The stop word: break leaves the loop immediately.
+    if entry == "q":
+        break
+
+    # Now it's safe to convert the text to a whole number.
+    age = int(entry)
+
+    # Stage 3: reject impossible ages.
+    # "or" is true when EITHER side is true: negative, or over 120.
+    if age < 0 or age > 120:
+        print("Invalid age, please try again")
+        # continue skips the rest of this round and jumps back to the top
+        # of the loop, so an invalid visitor is not priced or added to the list.
+        continue
+
+    # Same checks as Stage 1, but we store the price instead of printing it,
+    # so we can add it to the list afterwards.
+    if age <= 5:
+        price = 0
+    elif age <= 17:
+        price = 30
+    elif age <= 59:
+        price = 60
+    else:
+        price = 40
+
+    print("Ticket price: GHS", price)
+
+    # append() adds one item to the END of the list.
+    prices.append(price)
+
+# This runs only after the loop has ended.
+# len() counts the items in the list, so it equals the number of valid visitors.
+print("Visitors served:", len(prices))
+
+# sum() adds up all the numbers in the list.
+print("Total collected: GHS", sum(prices))
+
+# Printing a list shows all its items inside square brackets.
+print("All prices:", prices)
+```
+
+### Sample run
+
+I entered the ages 5, 30, 70 and 130, then `q`:
+
+```text
+Enter the visitor's age (or q to finish): 5
+Ticket price: GHS 0
+Enter the visitor's age (or q to finish): 30
+Ticket price: GHS 60
+Enter the visitor's age (or q to finish): 70
+Ticket price: GHS 40
+Enter the visitor's age (or q to finish): 130
+Invalid age, please try again
+Enter the visitor's age (or q to finish): q
+Visitors served: 3
+Total collected: GHS 100
+All prices: [0, 60, 40]
+```
+ 
+
+The 130 was rejected, so it was never priced or added to the list.
+
+To try it yourself, download `Akwaanya_Cruise_Ticketing.py` from this repo and run:
+
+```bash
+python3 Akwaanya_Cruise_Ticketing.py
+```
+
+### The mental model
+
+- **The first true condition wins.** Python checks an `if-elif-else` chain from the top and skips everything after the first true branch. That is why the order matters: if two conditions can both be true, the more specific one has to come first.
+- **`break` leaves the loop; `continue` skips to the next round.** I used `break` for the stop word and `continue` for invalid ages.
+- **The list is the single record.** Each valid visitor adds exactly one price, so `len(prices)` is the number of visitors and `sum(prices)` is the total. That is why I could delete the two separate counters I had in Stage 2.
+- **Test the boundaries.** The prices change at ages 5/6, 17/18 and 59/60, and the age check changes at 0 and 120/121. Those are the ages where a `<` that should have been `<=` shows up.
+
+### Why it matters
+
+Each section of the module was a separate idea on its own: conditions, loops, logic operators, lists. Putting them into one program showed me how they fit together. The loop repeats the conditions, the validation protects the list, and the list replaces the counters.
+
+### A known limitation
+
+If the operator types a letter instead of a number (or just presses Enter), the program crashes at `int(entry)`, because `int()` cannot convert text like `abc`. Only `q` is handled, because it is checked before `int()` runs. The fix is error handling with `try` and `except`, which I have not covered yet, so that is my next improvement.
+
+### Challenges: the ticketing project
+
+1. **The order of the `elif` checks.** My first attempt at a grading chain checked the lower threshold first, so a score of 72 printed "pass" and never reached "merit". It only clicked when I saw that the first true condition wins and everything below it is skipped.
+2. **`<` versus `<=` at the boundaries.** The age 5 rule (free up to and including 5) came down to one character. Testing the boundary ages one by one was the only reliable way to be sure each band was correct.
+3. **Strings versus numbers.** `input()` always gives back text, so comparing the age with a number needs `int()` first. I also had to check for `q` *before* converting, or the program would crash on the stop word.
 
 *Written by Quincy — Team Nova*
