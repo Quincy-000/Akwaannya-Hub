@@ -1,0 +1,11 @@
+# Python virtual environments
+.venv/
+venv/
+env/
+
+# Compiled Python and caches
+__pycache__/
+*.pyc
+
+# Local backups
+*.bak
